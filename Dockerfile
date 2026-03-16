@@ -15,8 +15,12 @@
 # Stage 1: Build the Go binary
 FROM golang:1.20-alpine AS builder
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
+
+# Copy go.mod and generate go.sum inside container
+COPY go.mod ./
+RUN go mod tidy
+
+# Copy source files and build
 COPY *.go ./
 RUN go build -o /hello-app
 
